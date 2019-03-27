@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><process version="9.1.000">
+  <context>
+    <input/>
+    <output/>
+    <macros/>
+  </context>
+  <operator activated="true" class="process" compatibility="9.1.000" expanded="true" name="Process">
+    <parameter key="logverbosity" value="init"/>
+    <parameter key="random_seed" value="2001"/>
+    <parameter key="send_mail" value="never"/>
+    <parameter key="notification_email" value=""/>
+    <parameter key="process_duration_for_mail" value="30"/>
+    <parameter key="encoding" value="SYSTEM"/>
+    <process expanded="true">
+      <operator activated="true" class="subprocess" compatibility="9.1.000" expanded="true" height="82" name="Subprocess" width="90" x="112" y="85">
+        <process expanded="true">
+          <operator activated="true" class="retrieve" compatibility="9.1.000" expanded="true" height="68" name="Retrieve Walmart-Sales-Data-TrainV2" width="90" x="45" y="34">
+            <parameter key="repository_entry" value="//DataMiningProject/data/Walmart-Sales-Data-TrainV2"/>
+          </operator>
+          <operator activated="true" class="aggregate" compatibility="9.1.000" expanded="true" height="82" name="Aggregate" width="90" x="179" y="34">
+            <parameter key="use_default_aggregation" value="false"/>
+            <parameter key="attribute_filter_type" value="all"/>
+            <parameter key="attribute" value=""/>
+            <parameter key="attributes" value=""/>
+            <parameter key="use_except_expression" value="false"/>
+            <parameter key="value_type" value="attribute_value"/>
+            <parameter key="use_value_type_exception" value="false"/>
+            <parameter key="except_value_type" value="time"/>
+            <parameter key="block_type" value="attribute_block"/>
+            <parameter key="use_block_type_exception" value="false"/>
+            <parameter key="except_block_type" value="value_matrix_row_start"/>
+            <parameter key="invert_selection" value="false"/>
+            <parameter key="include_special_attributes" value="false"/>
+            <parameter key="default_aggregation_function" value="average"/>
+            <list key="aggregation_attributes">
+              <parameter key="Item_Outlet_Sales" value="average"/>
+            </list>
+            <parameter key="group_by_attributes" value="Item_Identifier"/>
+            <parameter key="count_all_combinations" value="false"/>
+            <parameter key="only_distinct" value="false"/>
+            <parameter key="ignore_missings" value="true"/>
+            <description align="center" color="transparent" colored="false" width="126">Group By Item Identifier</description>
+          </operator>
+          <operator activated="true" class="write_excel" compatibility="9.1.000" expanded="true" height="82" name="Write Excel" width="90" x="313" y="34">
+            <parameter key="excel_file" value="/Users/shailendralohia/Downloads/Masters/Data Mining/Walmart-Sale-Data-Analysis/v2/Average-Item-Sale.xlsx"/>
+            <parameter key="file_format" value="xlsx"/>
+            <parameter key="encoding" value="SYSTEM"/>
+            <parameter key="sheet_name" value="RapidMiner Data"/>
+            <parameter key="date_format" value="yyyy-MM-dd HH:mm:ss"/>
+            <parameter key="number_format" value="#.0"/>
+          </operator>
+          <operator activated="true" class="store" compatibility="9.1.000" expanded="true" height="68" name="Store" width="90" x="447" y="34">
+            <parameter key="repository_entry" value="../data/Average-Item-Sale"/>
+          </operator>
+          <connect from_op="Retrieve Walmart-Sales-Data-TrainV2" from_port="output" to_op="Aggregate" to_port="example set input"/>
+          <connect from_op="Aggregate" from_port="example set output" to_op="Write Excel" to_port="input"/>
+          <connect from_op="Write Excel" from_port="through" to_op="Store" to_port="input"/>
+          <connect from_op="Store" from_port="through" to_port="out 1"/>
+          <portSpacing port="source_in 1" spacing="0"/>
+          <portSpacing port="sink_out 1" spacing="0"/>
+          <portSpacing port="sink_out 2" spacing="0"/>
+        </process>
+      </operator>
+      <connect from_op="Subprocess" from_port="out 1" to_port="result 1"/>
+      <portSpacing port="source_input 1" spacing="0"/>
+      <portSpacing port="sink_result 1" spacing="0"/>
+      <portSpacing port="sink_result 2" spacing="0"/>
+    </process>
+  </operator>
+</process>
